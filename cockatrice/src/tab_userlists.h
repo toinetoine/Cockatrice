@@ -43,6 +43,7 @@ private:
     UserInfoBox *userInfoBox;
     LineEditUnfocusable *addBuddyEdit;
     LineEditUnfocusable *addIgnoreEdit;
+    QGroupBox *buddyPanelGroupBox;
     void addToList(const std::string &listName, const QString &userName);
 
 public:
