@@ -86,10 +86,12 @@ TabUserLists::TabUserLists(TabSupervisor *_tabSupervisor,
     QVBoxLayout *ignorePanel = new QVBoxLayout;
     ignorePanel->addWidget(ignoreList);
     ignorePanel->addLayout(addToIgnoreList);
+    ignorePanelGroupBox = new QGroupBox;
+    ignorePanelGroupBox->setLayout(ignorePanel);
 
     QHBoxLayout *mainLayout = new QHBoxLayout;
     mainLayout->addLayout(buddyPanelGroupBox);
-    mainLayout->addLayout(ignorePanel);
+    mainLayout->addLayout(ignorePanelGroupBox);
     mainLayout->addLayout(vbox);
 
     retranslateUi();
