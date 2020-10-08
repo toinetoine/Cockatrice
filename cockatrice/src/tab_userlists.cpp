@@ -90,8 +90,8 @@ TabUserLists::TabUserLists(TabSupervisor *_tabSupervisor,
 
     QHBoxLayout *mainLayout = new QHBoxLayout;
     mainLayout->addWidget(accountPanelGroupBox);
-    mainLayout->addWidget(buddyPanel);
-    mainLayout->addWidget(ignorePanel);
+    mainLayout->addLayout(buddyPanel);
+    mainLayout->addLayout(ignorePanel);
 
     retranslateUi();
 
