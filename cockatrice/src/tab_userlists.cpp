@@ -57,13 +57,13 @@ TabUserLists::TabUserLists(TabSupervisor *_tabSupervisor,
 
     QVBoxLayout *accountPanel = new QVBoxLayout;
     accountPanel->addWidget(userInfoBox);
-    accountPanel->addWidget(allUsersList);
-    //accountPanelGroupBox = new QGroupBox;
-    //accountPanelGroupBox->setLayout(accountPanel);
+    accountPanel->addWidget(allUsersList);    // All servers user list doesn't belong here --> server tab: #833
+    accountPanelGroupBox = new QGroupBox;
+    accountPanelGroupBox->setLayout(accountPanel);
+    accountPanelGroupBox->setTitle(tr("Account Information"));
       
-      //TODO correct outer grouping around buddylist + add budy option is in place,
-      //     old group with count and name only around list is still there and needs to move its name to the new one and get removed
-      //TODO group box with label around account information
+      //TODO added correct outer grouping around buddylist + add budy option,
+      //     old group with count and name only around list is still there and needs to move its name to the new one and should get removed
 
     QHBoxLayout *addToBuddyList = new QHBoxLayout;
     addBuddyEdit = new LineEditUnfocusable;
@@ -98,8 +98,7 @@ TabUserLists::TabUserLists(TabSupervisor *_tabSupervisor,
     QHBoxLayout *mainLayout = new QHBoxLayout;
     mainLayout->addWidget(buddyPanelGroupBox);
     mainLayout->addWidget(ignorePanelGroupBox);
-    mainLayout->addLayout(accountPanel);
-    //mainLayout->addWidget(accountPanelGroupBox);
+    mainLayout->addWidget(accountPanelGroupBox);
 
     retranslateUi();
 
