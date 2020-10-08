@@ -58,6 +58,11 @@ TabUserLists::TabUserLists(TabSupervisor *_tabSupervisor,
     QVBoxLayout *vbox = new QVBoxLayout;
     vbox->addWidget(userInfoBox);
     vbox->addWidget(allUsersList);
+      
+      //TODO rename vbox
+      //TODO correct outer grouping around buddylist + add budy option is in place,
+      //     old group with count and name only around list is still there and needs to move its name to the new one and get removed
+      //TODO group box with label around account information
 
     QHBoxLayout *addToBuddyList = new QHBoxLayout;
     addBuddyEdit = new LineEditUnfocusable;
