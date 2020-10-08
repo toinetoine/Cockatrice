@@ -49,7 +49,7 @@ UserInfoBox::UserInfoBox(AbstractClient *_client, bool _editable, QWidget *paren
     mainLayout->addWidget(&userLevelLabel2, 5, 1, 1, 1);
     mainLayout->addWidget(&userLevelLabel3, 5, 2, 1, 1);
     mainLayout->addWidget(&accountAgeLabel1, 6, 0, 1, 1);
-    mainLayout->addWidget(&accountAgeLabel2, 6, 2, 1, 1);
+    mainLayout->addWidget(&accountAgeLabel2, 6, 1, 1, 2);
     mainLayout->setColumnStretch(2, 10);
 
     if (editable) {
@@ -76,7 +76,7 @@ void UserInfoBox::retranslateUi()
     userLevelLabel1.setText(tr("User level:"));
     accountAgeLabel1.setText(tr("Account Age:"));
 
-    editButton.setText(tr("Edit"));
+    editButton.setText(tr("Edit profile"));
     passwordButton.setText(tr("Change password"));
     avatarButton.setText(tr("Change avatar"));
 }
