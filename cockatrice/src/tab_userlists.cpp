@@ -80,15 +80,15 @@ TabUserLists::TabUserLists(TabSupervisor *_tabSupervisor,
     QVBoxLayout *buddyPanel = new QVBoxLayout;
     buddyPanel->addWidget(buddyList);
     buddyPanel->addLayout(addToBuddyList);
-    buddyPanelBox = new QGroupBox;
-    buddyPanelBox->setLayout(buddyPanel);
+    buddyPanelGroupBox = new QGroupBox;
+    buddyPanelGroupBox->setLayout(buddyPanel);
 
     QVBoxLayout *ignorePanel = new QVBoxLayout;
     ignorePanel->addWidget(ignoreList);
     ignorePanel->addLayout(addToIgnoreList);
 
     QHBoxLayout *mainLayout = new QHBoxLayout;
-    mainLayout->addLayout(buddyPanelBox);
+    mainLayout->addLayout(buddyPanelGroupBox);
     mainLayout->addLayout(ignorePanel);
     mainLayout->addLayout(vbox);
 
