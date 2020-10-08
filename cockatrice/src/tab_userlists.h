@@ -8,6 +8,7 @@ class AbstractClient;
 class UserList;
 class UserInfoBox;
 class LineEditUnfocusable;
+class QGroupBox;
 
 class Event_ListRooms;
 class Event_UserJoined;
