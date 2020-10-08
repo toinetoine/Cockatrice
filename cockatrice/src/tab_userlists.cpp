@@ -13,6 +13,7 @@
 #include "userinfobox.h"
 #include "userlist.h"
 
+#include <QGroupBox>
 #include <QHBoxLayout>
 #include <QPushButton>
 #include <QVBoxLayout>
@@ -79,13 +80,15 @@ TabUserLists::TabUserLists(TabSupervisor *_tabSupervisor,
     QVBoxLayout *buddyPanel = new QVBoxLayout;
     buddyPanel->addWidget(buddyList);
     buddyPanel->addLayout(addToBuddyList);
+    buddyPanelBox = new QGroupBox;
+    buddyPanelBox->setLayout(buddyPanel);
 
     QVBoxLayout *ignorePanel = new QVBoxLayout;
     ignorePanel->addWidget(ignoreList);
     ignorePanel->addLayout(addToIgnoreList);
 
     QHBoxLayout *mainLayout = new QHBoxLayout;
-    mainLayout->addLayout(buddyPanel);
+    mainLayout->addLayout(buddyPanelBox);
     mainLayout->addLayout(ignorePanel);
     mainLayout->addLayout(vbox);
 
