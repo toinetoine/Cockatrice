@@ -57,10 +57,12 @@ TabUserLists::TabUserLists(TabSupervisor *_tabSupervisor,
 
     QVBoxLayout *accountPanel = new QVBoxLayout;
     accountPanel->addWidget(userInfoBox);
-    accountPanel->addWidget(allUsersList);    // All servers user list doesn't belong here --> server tab: #833
+    //accountPanel->addWidget(allUsersList);    // All servers user list doesn't belong here --> server tab: #833
     accountPanelGroupBox = new QGroupBox;
     accountPanelGroupBox->setLayout(accountPanel);
     accountPanelGroupBox->setTitle(tr("User Information"));
+    
+    userListPanel->addWidget(allUsersList);    // All servers user list doesn't belong here --> server tab: #833
       
       //TODO added correct outer grouping around buddylist + add budy option,
       //     old group with count and name only around list is still there and needs to move its name to the new one and should get removed
@@ -86,19 +88,15 @@ TabUserLists::TabUserLists(TabSupervisor *_tabSupervisor,
     QVBoxLayout *buddyPanel = new QVBoxLayout;
     buddyPanel->addWidget(buddyList);
     buddyPanel->addLayout(addToBuddyList);
-    buddyPanelGroupBox = new QGroupBox;
-    buddyPanelGroupBox->setLayout(buddyPanel);
 
     QVBoxLayout *ignorePanel = new QVBoxLayout;
     ignorePanel->addWidget(ignoreList);
     ignorePanel->addLayout(addToIgnoreList);
-    ignorePanelGroupBox = new QGroupBox;
-    ignorePanelGroupBox->setLayout(ignorePanel);
 
     QHBoxLayout *mainLayout = new QHBoxLayout;
     mainLayout->addWidget(accountPanelGroupBox);
-    mainLayout->addWidget(buddyPanelGroupBox);
-    mainLayout->addWidget(ignorePanelGroupBox);
+    mainLayout->addWidget(buddyPanel);
+    mainLayout->addWidget(ignorePanel);
 
     retranslateUi();
 
