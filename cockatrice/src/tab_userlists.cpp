@@ -90,8 +90,8 @@ TabUserLists::TabUserLists(TabSupervisor *_tabSupervisor,
     ignorePanelGroupBox->setLayout(ignorePanel);
 
     QHBoxLayout *mainLayout = new QHBoxLayout;
-    mainLayout->addLayout(buddyPanelGroupBox);
-    mainLayout->addLayout(ignorePanelGroupBox);
+    mainLayout->addWidget(buddyPanelGroupBox);
+    mainLayout->addWidget(ignorePanelGroupBox);
     mainLayout->addLayout(vbox);
 
     retranslateUi();
