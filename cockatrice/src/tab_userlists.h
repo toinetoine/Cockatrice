@@ -44,7 +44,7 @@ private:
     UserInfoBox *userInfoBox;
     LineEditUnfocusable *addBuddyEdit;
     LineEditUnfocusable *addIgnoreEdit;
-    QGroupBox *buddyPanelGroupBox, *ignorePanelGroupBox;
+    QGroupBox *buddyPanelGroupBox, *ignorePanelGroupBox, *accountPanelGroupBox;
     void addToList(const std::string &listName, const QString &userName);
 
 public:
