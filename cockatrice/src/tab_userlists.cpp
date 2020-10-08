@@ -60,7 +60,7 @@ TabUserLists::TabUserLists(TabSupervisor *_tabSupervisor,
     accountPanel->addWidget(allUsersList);    // All servers user list doesn't belong here --> server tab: #833
     accountPanelGroupBox = new QGroupBox;
     accountPanelGroupBox->setLayout(accountPanel);
-    accountPanelGroupBox->setTitle(tr("Account Information"));
+    accountPanelGroupBox->setTitle(tr("User Information"));
       
       //TODO added correct outer grouping around buddylist + add budy option,
       //     old group with count and name only around list is still there and needs to move its name to the new one and should get removed
