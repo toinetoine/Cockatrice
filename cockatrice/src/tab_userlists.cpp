@@ -96,9 +96,9 @@ TabUserLists::TabUserLists(TabSupervisor *_tabSupervisor,
     ignorePanelGroupBox->setLayout(ignorePanel);
 
     QHBoxLayout *mainLayout = new QHBoxLayout;
+    mainLayout->addWidget(accountPanelGroupBox);
     mainLayout->addWidget(buddyPanelGroupBox);
     mainLayout->addWidget(ignorePanelGroupBox);
-    mainLayout->addWidget(accountPanelGroupBox);
 
     retranslateUi();
 
