@@ -2,15 +2,14 @@
 <b>Available pre-compiled binaries for installation:</b>
  - <kbd>Windows 7</kbd></i> and newer
  - <kbd>Windows 7 (32 bit)</kbd></i> and newer
- - <kbd>macOS 10.13</kbd> ("High Sierra" and newer)</i>
- - <kbd>macOS 10.15</kbd> ("Catalina" and newer)</i>
- - <kbd>Ubuntu 18.04</kbd> ("Bionic Beaver")</i>
+ - <kbd>macOS 10.14</kbd> ("Mojave" and newer)</i>
  - <kbd>Ubuntu 20.04</kbd> ("Focal Fossa")</i>
  - <kbd>Debian 10</kbd> ("Buster")</i>
  - <kbd>Fedora 33</kbd></i>
  
-We are also packaged in <kbd>Arch Linux</kbd>'s official community repository, courtesy of @skwerlman</i>
-General linux support is available via a <kbd>flatpak</kbd> package on Flathub!</i>
+We are also packaged in <kbd>Arch Linux</kbd>'s official community repository</i>.
+And general linux support is available via a <kbd>flatpak</kbd> package on Flathub!</i>
+However, there can be a little delay until the release arrives there.
 </pre>
 
 
