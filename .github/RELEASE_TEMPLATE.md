@@ -1,10 +1,10 @@
 <pre>
 <b>Available pre-compiled binaries for installation:</b>
- - <kbd>Windows 7</kbd></i> and newer
+ - <kbd>Windows 7</kbd> and newer
  - <kbd>Windows 7 (32 bit)</kbd></i> and newer
- - <kbd>macOS 10.14</kbd> ("Mojave" and newer)</i>
- - <kbd>Ubuntu 20.04</kbd> ("Focal Fossa")</i>
- - <kbd>Debian 10</kbd> ("Buster")</i>
+ - <kbd>macOS 10.14</kbd> <i>"Mojave"</i> and newer</i>
+ - <kbd>Ubuntu 20.04</kbd> <i>"Focal Fossa"</i>
+ - <kbd>Debian 10</kbd> <i>"Buster"</i>
  - <kbd>Fedora 33</kbd></i>
  
 We are also packaged in <kbd>Arch Linux</kbd>'s official community repository</i>.
