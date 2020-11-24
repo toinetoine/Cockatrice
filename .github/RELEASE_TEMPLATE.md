@@ -10,7 +10,7 @@
  - <kbd>Debian 10</kbd> <i>"Buster"</i>
  - <kbd>Fedora 33</kbd></i>
  
-We are also packaged in <kbd>Arch Linux</kbd>'s official community repository</i>.
+We are also packaged in <kbd>Arch Linux</kbd>'s official community repository, courtesy of @FFY00</i>.
 And general linux support is available via a <kbd>flatpak</kbd> package on Flathub!</i>
 However, there can be a little delay until the release arrives there.
 </pre>
@@ -33,7 +33,7 @@ However, there can be a little delay until the release arrives there.
    
 <i>Other Linux distributions / availability in package managers:</i>
 General linux support is available via a <kbd>flatpak</kbd> package on Flathub!</i>
-We are also packaged in <kbd>Arch Linux</kbd>'s official community repository</i>.
+We are also packaged in <kbd>Arch Linux</kbd>'s official community repository, courtesy of @FFY00</i>.
 However, there can be a little delay until the release arrives there.
 </pre>
 
