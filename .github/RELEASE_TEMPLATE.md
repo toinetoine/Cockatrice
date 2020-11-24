@@ -1,5 +1,5 @@
 <pre>
-<b>Available pre-compiled binaries for installation:</b>
+<b>Available binaries for easy installation:</b>
  
  - <kbd>Windows 7</kbd> and newer
  - <kbd>Windows 7 (32 bit)</kbd></i> and newer
