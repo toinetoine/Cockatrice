@@ -5,7 +5,7 @@
 <p align='center'>
    <a href="#cockatrice"><b>Cockatrice</b></a> <b>|</b>
    <a href="#download-">Download</a> <b>|</b>
-   <a href="#get-involved-">Get Involved</a> <b>|</b>
+   <a href="#get-involved--">Get Involved</a> <b>|</b>
    <a href="#community-resources">Community</a> <b>|</b>
    <a href="#translations-">Translations</a> <b>|</b>
    <a href="#build---">Build</a> <b>|</b>
@@ -68,7 +68,7 @@ Cockatrice uses the [Google Developer Documentation Style Guide](https://develop
 - [reddit r/Cockatrice](https://reddit.com/r/cockatrice)
 
 
-# Translations [![Cockatrice on Transiflex](https://tx-assets.scdn5.secure.raxcdn.com/static/charts/images/tx-logo-micro.c5603f91c780.png)](https://www.transifex.com/projects/p/cockatrice/)
+# Translations [![Transifex Project](https://img.shields.io/badge/translate-on%20transifex-brightgreen)](https://www.transifex.com/projects/p/cockatrice/)
 
 Cockatrice uses Transifex for translations. You can help us bring Cockatrice and Oracle to your language or just edit single wordings right from within your browser by visiting our [Transifex project page](https://www.transifex.com/projects/p/cockatrice/).<br>
 
@@ -79,9 +79,9 @@ Cockatrice uses Transifex for translations. You can help us bring Cockatrice and
 Check out our [Translator FAQ](https://github.com/Cockatrice/Cockatrice/wiki/Translation-FAQ) for more information about contributing!<br>
 
 
-# Build [![Travis Build Status - master](https://travis-ci.org/Cockatrice/Cockatrice.svg?branch=master)](https://travis-ci.org/Cockatrice/Cockatrice) [![Appveyor Build Status - master](https://ci.appveyor.com/api/projects/status/oauxf5a0sj689rcg/branch/master?svg=true)](https://ci.appveyor.com/project/ZeldaZach/cockatrice/branch/master) <!-- link to zachs appveyor not correct yet -->
+# Build [![Linux builds - master](https://github.com/Cockatrice/Cockatrice/workflows/Build%20on%20Linux%20(Docker)/badge.svg?branch=master)](https://github.com/Cockatrice/Cockatrice/actions?query=workflow%3A%22Build+on+Linux+%28Docker%29%22+branch%3Amaster) [![macOS builds - master](https://github.com/Cockatrice/Cockatrice/workflows/Build%20on%20macOS/badge.svg?branch=master)](https://github.com/Cockatrice/Cockatrice/actions?query=workflow%3A%22Build+on+macOS%22+branch%3Amaster) [![Windows builds - master](https://github.com/Cockatrice/Cockatrice/workflows/Build%20on%20Windows/badge.svg?branch=master)](https://github.com/Cockatrice/Cockatrice/actions?query=workflow%3A%22Build+on+Windows%22+branch%3Amaster)
 
-**Detailed compiling instructions are on the Cockatrice wiki under [Compiling Cockatrice](https://github.com/Cockatrice/Cockatrice/wiki/Compiling-Cockatrice)**
+**Detailed compiling instructions can be found on the Cockatrice wiki under [Compiling Cockatrice](https://github.com/Cockatrice/Cockatrice/wiki/Compiling-Cockatrice)**
 
 Dependencies: *(for minimum requirements search our [CMake file](https://github.com/Cockatrice/Cockatrice/blob/master/CMakeLists.txt))*
 - [Qt](https://www.qt.io/developers/)
@@ -160,6 +160,7 @@ docker-compose up       # Setup and run both the MySQL server and Servatrice.
 A out of box working docker-compose file has been added to help setup in Windows.
 
 Docker in Windows requires additional steps in form of using Docker Desktop to allow resource sharing from the drive the volumes are mapped from, as well as potential workarounds needed to get file sharing working in Windows. This [StackOverflow discussion sheds some light on it](https://stackoverflow.com/questions/42203488/settings-to-windows-firewall-to-allow-docker-for-windows-to-share-drive)
+
 
 # License [![GPLv2 License](https://img.shields.io/github/license/Cockatrice/Cockatrice.svg)](https://github.com/Cockatrice/Cockatrice/blob/master/LICENSE)
 
