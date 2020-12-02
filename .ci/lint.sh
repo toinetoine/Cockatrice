@@ -1,9 +1,19 @@
 #!/bin/bash
 
-# Check formatting using clang-format
+# fetch master branch
+git fetch origin master
+
+# unshallow if needed
+echo "Finding merge base"
+if ! git merge-base origin/master HEAD; then
+  echo "Could not find merge base, unshallowing repo"
+  git fetch --unshallow
+fi
+
+# Check formatting using clangify
 echo "Checking your code using clang-format..."
 
-diff="$(./clangify.sh --diff --cf-version)"
+diff="$(./clangify.sh --diff --cf-version --branch origin/master)"
 err=$?
 
 case $err in
@@ -18,7 +28,7 @@ case $err in
 ***  Then commit and push those changes to this branch. ***
 ***   Check our CONTRIBUTING.md file for more details.  ***
 ***                                                     ***
-***                    Thank you ❤️                     ***
+***                    Thank you ❤️                      ***
 ***                                                     ***
 ***********************************************************
 

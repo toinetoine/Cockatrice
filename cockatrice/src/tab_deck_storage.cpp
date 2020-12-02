@@ -31,7 +31,7 @@ TabDeckStorage::TabDeckStorage(TabSupervisor *_tabSupervisor, AbstractClient *_c
     : Tab(_tabSupervisor), client(_client)
 {
     localDirModel = new QFileSystemModel(this);
-    localDirModel->setRootPath(settingsCache->getDeckPath());
+    localDirModel->setRootPath(SettingsCache::instance().getDeckPath());
     localDirModel->sort(0, Qt::AscendingOrder);
 
     localDirView = new QTreeView;
@@ -196,6 +196,9 @@ void TabDeckStorage::uploadFinished(const Response &r, const CommandContainer &c
 void TabDeckStorage::actDeleteLocalDeck()
 {
     QModelIndex curLeft = localDirView->selectionModel()->currentIndex();
+    if (localDirModel->isDir(curLeft))
+        return;
+
     if (QMessageBox::warning(this, tr("Delete local file"),
                              tr("Are you sure you want to delete \"%1\"?").arg(localDirModel->fileName(curLeft)),
                              QMessageBox::Yes | QMessageBox::No) != QMessageBox::Yes)

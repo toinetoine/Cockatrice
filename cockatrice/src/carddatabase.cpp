@@ -10,8 +10,10 @@
 #include <QCryptographicHash>
 #include <QDebug>
 #include <QDir>
+#include <QDirIterator>
 #include <QFile>
 #include <QMessageBox>
+#include <QRegularExpression>
 #include <algorithm>
 #include <utility>
 
@@ -68,27 +70,27 @@ QString CardSet::getCorrectedShortName() const
 
 void CardSet::loadSetOptions()
 {
-    sortKey = settingsCache->cardDatabase().getSortKey(shortName);
-    enabled = settingsCache->cardDatabase().isEnabled(shortName);
-    isknown = settingsCache->cardDatabase().isKnown(shortName);
+    sortKey = SettingsCache::instance().cardDatabase().getSortKey(shortName);
+    enabled = SettingsCache::instance().cardDatabase().isEnabled(shortName);
+    isknown = SettingsCache::instance().cardDatabase().isKnown(shortName);
 }
 
 void CardSet::setSortKey(unsigned int _sortKey)
 {
     sortKey = _sortKey;
-    settingsCache->cardDatabase().setSortKey(shortName, _sortKey);
+    SettingsCache::instance().cardDatabase().setSortKey(shortName, _sortKey);
 }
 
 void CardSet::setEnabled(bool _enabled)
 {
     enabled = _enabled;
-    settingsCache->cardDatabase().setEnabled(shortName, _enabled);
+    SettingsCache::instance().cardDatabase().setEnabled(shortName, _enabled);
 }
 
 void CardSet::setIsKnown(bool _isknown)
 {
     isknown = _isknown;
-    settingsCache->cardDatabase().setIsKnown(shortName, _isknown);
+    SettingsCache::instance().cardDatabase().setIsKnown(shortName, _isknown);
 }
 
 class SetList::KeyCompareFunctor
@@ -291,22 +293,23 @@ void CardInfo::refreshCachedSetNames()
 
 QString CardInfo::simplifyName(const QString &name)
 {
-    QString simpleName(name);
+    static const QRegularExpression spaceOrSplit("(\\s+|\\/\\/.*)");
+    static const QRegularExpression nonAlnum("[^a-z0-9]");
+
+    QString simpleName = name.toLower();
+
+    // remove spaces and right halves of split cards
+    simpleName.remove(spaceOrSplit);
 
     // So Aetherling would work, but not Ætherling since 'Æ' would get replaced
     // with nothing.
     simpleName.replace("æ", "ae");
-    simpleName.replace("Æ", "AE");
 
     // Replace Jötun Grunt with Jotun Grunt.
     simpleName = simpleName.normalized(QString::NormalizationForm_KD);
 
-    // Replace dashes with spaces so that we can say "garruk the veil cursed"
-    // instead of the unintuitive "garruk the veilcursed".
-    simpleName = simpleName.replace("-", " ");
-
-    simpleName.remove(QRegExp("[^a-zA-Z0-9 ]"));
-    simpleName = simpleName.toLower();
+    // remove all non alphanumeric characters from the name
+    simpleName.remove(nonAlnum);
     return simpleName;
 }
 
@@ -337,7 +340,7 @@ CardDatabase::CardDatabase(QObject *parent) : QObject(parent), loadStatus(NotLoa
         connect(parser, SIGNAL(addSet(CardSetPtr)), this, SLOT(addSet(CardSetPtr)), Qt::DirectConnection);
     }
 
-    connect(settingsCache, SIGNAL(cardDatabasePathChanged()), this, SLOT(loadCardDatabases()));
+    connect(&SettingsCache::instance(), SIGNAL(cardDatabasePathChanged()), this, SLOT(loadCardDatabases()));
 }
 
 CardDatabase::~CardDatabase()
@@ -437,6 +440,19 @@ CardInfoPtr CardDatabase::getCardBySimpleName(const QString &cardName) const
     return getCardFromMap(simpleNameCards, CardInfo::simplifyName(cardName));
 }
 
+CardInfoPtr CardDatabase::guessCard(const QString &cardName) const
+{
+    CardInfoPtr temp = getCard(cardName);
+    if (temp == nullptr) { // get card by simple name instead
+        temp = getCardBySimpleName(cardName);
+        if (temp == nullptr) { // still could not find the card, so simplify the cardName too
+            QString simpleCardName = CardInfo::simplifyName(cardName);
+            temp = getCardBySimpleName(simpleCardName);
+        }
+    }
+    return temp; // returns nullptr if not found
+}
+
 CardSetPtr CardDatabase::getSet(const QString &setName)
 {
     if (sets.contains(setName)) {
@@ -515,15 +531,25 @@ LoadStatus CardDatabase::loadCardDatabases()
 
     clear(); // remove old db
 
-    loadStatus = loadCardDatabase(settingsCache->getCardDatabasePath()); // load main card database
-    loadCardDatabase(settingsCache->getTokenDatabasePath());             // load tokens database
-    loadCardDatabase(settingsCache->getSpoilerCardDatabasePath());       // load spoilers database
+    loadStatus = loadCardDatabase(SettingsCache::instance().getCardDatabasePath()); // load main card database
+    loadCardDatabase(SettingsCache::instance().getTokenDatabasePath());             // load tokens database
+    loadCardDatabase(SettingsCache::instance().getSpoilerCardDatabasePath());       // load spoilers database
 
-    // load custom card databases
-    QDir dir(settingsCache->getCustomCardDatabasePath());
-    for (const QString &fileName :
-         dir.entryList(QStringList("*.xml"), QDir::Files | QDir::Readable, QDir::Name | QDir::IgnoreCase)) {
-        loadCardDatabase(dir.absoluteFilePath(fileName));
+    // find all custom card databases, recursively & following symlinks
+    // then load them alphabetically
+    QDirIterator customDatabaseIterator(SettingsCache::instance().getCustomCardDatabasePath(), QStringList() << "*.xml",
+                                        QDir::Files, QDirIterator::Subdirectories | QDirIterator::FollowSymlinks);
+    QStringList databasePaths;
+    while (customDatabaseIterator.hasNext()) {
+        customDatabaseIterator.next();
+        databasePaths.push_back(customDatabaseIterator.filePath());
+    }
+    databasePaths.sort();
+
+    for (auto i = 0; i < databasePaths.size(); ++i) {
+        const auto &databasePath = databasePaths.at(i);
+        qDebug() << "Loading Custom Set" << i << "(" << databasePath << ")";
+        loadCardDatabase(databasePath);
     }
 
     // AFTER all the cards have been loaded
@@ -625,7 +651,8 @@ void CardDatabase::notifyEnabledSetsChanged()
 
 bool CardDatabase::saveCustomTokensToFile()
 {
-    QString fileName = settingsCache->getCustomCardDatabasePath() + "/" + CardDatabase::TOKENS_SETNAME + ".xml";
+    QString fileName =
+        SettingsCache::instance().getCustomCardDatabasePath() + "/" + CardDatabase::TOKENS_SETNAME + ".xml";
 
     SetNameMap tmpSets;
     CardSetPtr customTokensSet = getSet(CardDatabase::TOKENS_SETNAME);
