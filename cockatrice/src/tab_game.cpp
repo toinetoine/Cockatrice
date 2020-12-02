@@ -9,6 +9,7 @@
 #include "deckview.h"
 #include "dlg_creategame.h"
 #include "dlg_load_remote_deck.h"
+#include "dlg_manage_sets.h"
 #include "gamescene.h"
 #include "gameview.h"
 #include "get_pb_extension.h"
@@ -52,7 +53,7 @@
 #include "replay_timeline_widget.h"
 #include "settingscache.h"
 #include "tab_supervisor.h"
-#include "window_sets.h"
+#include "window_main.h"
 #include "zoneviewwidget.h"
 #include "zoneviewzone.h"
 
@@ -855,10 +856,8 @@ void TabGame::processGameEventContainer(const GameEventContainer &cont, Abstract
                 case GameEvent::LEAVE:
                     eventSpectatorLeave(event.GetExtension(Event_Leave::ext), playerId, context);
                     break;
-                default: {
-                    qDebug() << "unhandled spectator game event" << eventType;
+                default:
                     break;
-                }
             }
         } else {
             if ((clients.size() > 1) && (playerId != -1))
@@ -1194,6 +1193,11 @@ void TabGame::eventJoin(const Event_Join &event, int /*eventPlayerId*/, const Ga
     } else {
         Player *newPlayer = addPlayer(playerId, playerInfo.user_info());
         messageLog->logJoin(newPlayer);
+        if (trayIcon) {
+            QString gameId(QString::number(gameInfo.game_id()));
+            trayIcon->showMessage(tr("A player has joined game #%1").arg(gameId),
+                                  tr("%1 has joined the game").arg(newPlayer->getName()));
+        }
     }
     playerListWidget->addPlayer(playerInfo);
     emitUserEvent();

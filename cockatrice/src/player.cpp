@@ -83,13 +83,24 @@ void PlayerArea::updateBg()
 
 void PlayerArea::paint(QPainter *painter, const QStyleOptionGraphicsItem * /*option*/, QWidget * /*widget*/)
 {
-    painter->fillRect(bRect, themeManager->getPlayerBgBrush());
+    QBrush brush = themeManager->getPlayerBgBrush();
+
+    if (playerZoneId > 0) {
+        // If the extra image is not found, load the default one
+        brush = themeManager->getExtraPlayerBgBrush(QString::number(playerZoneId), brush);
+    }
+    painter->fillRect(boundingRect(), brush);
 }
 
 void PlayerArea::setSize(qreal width, qreal height)
 {
     prepareGeometryChange();
     bRect = QRectF(0, 0, width, height);
+}
+
+void PlayerArea::setPlayerZoneId(int _playerZoneId)
+{
+    playerZoneId = _playerZoneId;
 }
 
 Player::Player(const ServerInfo_User &info, int _id, bool _local, bool _judge, TabGame *_parent)
@@ -348,6 +359,7 @@ Player::Player(const ServerInfo_User &info, int _id, bool _local, bool _judge, T
         aCreateAnotherToken->setEnabled(false);
 
         createPredefinedTokenMenu = new QMenu(QString());
+        createPredefinedTokenMenu->setEnabled(false);
 
         playerMenu->addSeparator();
         countersMenu = playerMenu->addMenu(QString());
@@ -369,6 +381,7 @@ Player::Player(const ServerInfo_User &info, int _id, bool _local, bool _judge, T
 
     if (local || judge) {
         aCardMenu = new QAction(this);
+        aCardMenu->setEnabled(false);
         playerMenu->addSeparator();
         playerMenu->addAction(aCardMenu);
     } else {
@@ -910,6 +923,7 @@ void Player::initSayMenu()
     sayMenu->clear();
 
     int count = SettingsCache::instance().messages().getCount();
+    sayMenu->setEnabled(count > 0);
 
     for (int i = 0; i < count; ++i) {
         auto *newAction = new QAction(SettingsCache::instance().messages().getMessageAt(i), this);
@@ -927,10 +941,14 @@ void Player::setDeck(const DeckLoader &_deck)
     aOpenDeckInDeckEditor->setEnabled(deck);
 
     createPredefinedTokenMenu->clear();
+    createPredefinedTokenMenu->setEnabled(false);
     predefinedTokens.clear();
     InnerDecklistNode *tokenZone = dynamic_cast<InnerDecklistNode *>(deck->getRoot()->findChild(DECK_ZONE_TOKENS));
 
-    if (tokenZone)
+    if (tokenZone) {
+        if (tokenZone->size() > 0)
+            createPredefinedTokenMenu->setEnabled(true);
+
         for (int i = 0; i < tokenZone->size(); ++i) {
             const QString tokenName = tokenZone->at(i)->getName();
             predefinedTokens.append(tokenName);
@@ -940,6 +958,7 @@ void Player::setDeck(const DeckLoader &_deck)
             }
             connect(a, SIGNAL(triggered()), this, SLOT(actCreatePredefinedToken()));
         }
+    }
 }
 
 void Player::actViewLibrary()
@@ -1231,7 +1250,7 @@ void Player::actCreateToken()
 
     lastTokenName = dlg.getName();
     lastTokenPT = dlg.getPT();
-    CardInfoPtr correctedCard = db->getCardBySimpleName(lastTokenName);
+    CardInfoPtr correctedCard = db->guessCard(lastTokenName);
     if (correctedCard) {
         lastTokenName = correctedCard->getName();
         lastTokenTableRow = TableZone::clampValidTableRow(2 - correctedCard->getTableRow());
@@ -3219,6 +3238,7 @@ void Player::addRelatedCardActions(const CardItem *card, QMenu *cardMenu)
 void Player::setCardMenu(QMenu *menu)
 {
     if (aCardMenu) {
+        aCardMenu->setEnabled(menu != nullptr);
         aCardMenu->setMenu(menu);
     }
 }
@@ -3266,6 +3286,7 @@ void Player::setConceded(bool _conceded)
 void Player::setZoneId(int _zoneId)
 {
     zoneId = _zoneId;
+    playerArea->setPlayerZoneId(_zoneId);
 }
 
 void Player::setMirrored(bool _mirrored)
