@@ -16,6 +16,8 @@ on:
       - '**.md'
       - 'webclient/**'
 
+# Supported environments: https://github.com/actions/virtual-environments#available-environments
+
 jobs:
   configure:
     name: Configure
@@ -31,7 +33,7 @@ jobs:
       - name: Cancel previous runs
         uses: styfle/cancel-workflow-action@0.6.0
         with:
-          access_token: ${{github.token}} # needs other token https://github.com/styfle/cancel-workflow-action/issues/7
+          access_token: ${{github.token}}   # Needs other token https://github.com/styfle/cancel-workflow-action/issues/7
 
       - name: Configure
         id: configure
@@ -63,7 +65,7 @@ jobs:
           TAG: ${{steps.configure.outputs.tag}}
         run: .ci/prep_release.sh
 
-      - name: Create release
+      - name: Create GitHub Release
         if: steps.configure.outputs.tag != null
         id: create_release
         uses: actions/create-release@v1
@@ -80,20 +82,20 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        # these names correspond to the files in .ci/$distro
+        # The distro names correspond to the files in .ci/$distro
         include:
           - distro: UbuntuGroovy
             package: DEB
 
           - distro: UbuntuFocal
             package: DEB
-            test: skip # UbuntuFocal has a broken qt for debug builds
+            test: skip   # UbuntuFocal has a broken Qt for debug builds
 
           - distro: UbuntuBionic
             package: DEB
 
           - distro: ArchLinux
-            package: skip # we are packaged in arch already
+            package: skip   # We are packaged in Arch already
             allow-failure: yes
 
           - distro: DebianBuster
@@ -101,7 +103,7 @@ jobs:
 
           - distro: Fedora33
             package: RPM
-            test: skip # Fedora is our slowest build
+            test: skip   # Fedora is our slowest build
 
     name: ${{matrix.distro}}
 
@@ -113,7 +115,7 @@ jobs:
 
     env:
       NAME: ${{matrix.distro}}
-      CACHE: /tmp/${{matrix.distro}}-cache # ${{runner.temp}} does not work?
+      CACHE: /tmp/${{matrix.distro}}-cache   # ${{runner.temp}} does not work?
 
     steps:
       - name: Checkout
@@ -137,8 +139,8 @@ jobs:
       - name: Build ${{matrix.distro}} Docker image
         shell: bash
         run: |
-          # temporary workaround for arch libc version requiring upgraded host
-          # see https://bugs.archlinux.org/task/69563#comment196582
+          # Temporary workaround for arch libc version requiring upgraded host
+          # See https://bugs.archlinux.org/task/69563#comment196582
           if [[ $NAME == ArchLinux ]]; then
             wget http://ftp.us.debian.org/debian/pool/main/r/runc/runc_1.0.0~rc93+ds1-2_amd64.deb
             sudo dpkg -i --force-conflicts runc*.deb
@@ -171,7 +173,7 @@ jobs:
           path: ./build/${{steps.package.outputs.name}}
           if-no-files-found: error
 
-      - name: Upload to release
+      - name: Upload to GitHub Release
         if: matrix.package != 'skip' && needs.configure.outputs.tag != null
         uses: actions/upload-release-asset@v1
         env:
@@ -188,29 +190,20 @@ jobs:
       matrix:
         target:
           - Debug
-          - 10.11_El_Capitan
           - 10.14_Mojave
           - 10.15_Catalina
           - 11.0_Big_Sur
         include:
-          - target: Debug # tests only
+          - target: Debug   # Tests only
             os: macos-latest
             xcode: 11.7
             type: Debug
-            do_tests: 0 # tests do not work yet on mac
+            do_tests: 0   # Tests do not work on macOS yet
             make_package: false
 
-          - target: 10.11_El_Capitan
-            os: macos-10.13 # runs on HighSierra
-            allow-failure: yes # we don't know if it'll be added
-            xcode: 8.2.1 # should be compatible with macos 10.11.5
-            type: Release
-            do_tests: 0
-            make_package: true
-
           - target: 10.14_Mojave
-            os: macos-10.15 # runs on Catalina
-            xcode: 10.3 # should be compatible with macos 10.14.3
+            os: macos-10.15
+            xcode: 10.3   # Ensures compatibility with macOS 10.14
             type: Release
             do_tests: 0
             make_package: true
@@ -246,19 +239,19 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
-      - name: Install dependencies using homebrew
+      - name: Install dependencies using Homebrew
         shell: bash
-        # cmake cannot find the mysql connector
-        # neither of these works: mariadb-connector-c mysql-connector-c++
+        # CMake cannot find the MySQL connector
+        # Neither of these works: mariadb-connector-c mysql-connector-c++
         run: brew install ccache protobuf
 
-      - name: Install QT using homebrew
+      - name: Install Qt using Homebrew
         id: brew_install_qt
         continue-on-error: true
         shell: bash
         run: brew install qt@5 --force-bottle
 
-      - name: Install QT using actions
+      - name: Install Qt using Action
         if: steps.brew_install_qt.outcome != 'success'
         uses: jurplel/install-qt-action@v2
 
@@ -277,7 +270,7 @@ jobs:
           restore-keys: |
             ${{runner.os}}-xcode-${{matrix.xcode}}-ccache-
 
-      - name: Build on Xcode ${{matrix.xcode}}
+      - name: Build with Xcode ${{matrix.xcode}}
         shell: bash
         run: .ci/compile.sh ${{matrix.type}} --server
 
@@ -304,7 +297,7 @@ jobs:
           path: ${{steps.package.outputs.path}}
           if-no-files-found: error
 
-      - name: Upload to release
+      - name: Upload to GitHub Release
         if: matrix.make_package && needs.configure.outputs.tag != null
         uses: actions/upload-release-asset@v1
         env:
@@ -403,7 +396,7 @@ jobs:
           path: ./build/${{steps.package.outputs.name}}
           if-no-files-found: error
 
-      - name: Upload to release
+      - name: Upload to GitHub Release
         if: needs.configure.outputs.tag != null
         uses: actions/upload-release-asset@v1
         env:
