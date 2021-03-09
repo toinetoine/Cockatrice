@@ -139,7 +139,7 @@ jobs:
       - name: Build ${{matrix.distro}} Docker image
         shell: bash
         run: |
-          # Temporary workaround for arch libc version requiring upgraded host
+          # Temporary workaround for Arch libc version requiring upgraded host
           # See https://bugs.archlinux.org/task/69563#comment196582
           if [[ $NAME == ArchLinux ]]; then
             wget http://ftp.us.debian.org/debian/pool/main/r/runc/runc_1.0.0~rc93+ds1-2_amd64.deb
