@@ -75,7 +75,7 @@ mkdir -p build
 cd build
 
 if [[ ! $CMAKE_BUILD_PARALLEL_LEVEL ]]; then
-  CMAKE_BUILD_PARALLEL_LEVEL=2 # default machines have 2 cores
+  CMAKE_BUILD_PARALLEL_LEVEL=2   # Default machines have 2 cores
 fi
 
 # Add cmake flags
@@ -93,9 +93,9 @@ if [[ $PACKAGE_TYPE ]]; then
 fi
 
 if [[ $(uname) == "Darwin" ]]; then
-  # prepend ccache compiler binaries to path
+  # Prepend ccache compiler binaries to PATH
   PATH="/usr/local/opt/ccache/libexec:$PATH"
-  # Add qt install location when using homebrew
+  # Add Qt install location when using Homebrew
   flags+=" -DCMAKE_PREFIX_PATH=/usr/local/opt/qt5/"
 fi
 
@@ -104,7 +104,7 @@ echo "::group::Show ccache stats"
 ccache --show-stats
 echo "::endgroup::"
 
-echo "::group::Configure cmake"
+echo "::group::Configure CMake"
 cmake --version
 cmake .. $flags
 echo "::endgroup::"
