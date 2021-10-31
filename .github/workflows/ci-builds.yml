@@ -18,7 +18,7 @@ on:
 
 jobs:
   configure:
-    name: Configure
+    name: Configuration
 
     runs-on: ubuntu-latest
 
@@ -82,33 +82,33 @@ jobs:
       matrix:
         # these names correspond to the files in .ci/$distro
         include:
-          - distro: UbuntuImpish
+          - distro: UbuntuBionic
             package: DEB
+
+          - distro: UbuntuFocal
+            package: DEB
+            test: skip # Ubuntu Focal has a broken Qt for debug builds
 
           - distro: UbuntuHirsute
             package: DEB
             test: skip
 
-          - distro: UbuntuFocal
+          - distro: UbuntuImpish
             package: DEB
-            test: skip # UbuntuFocal has a broken qt for debug builds
-
-          - distro: UbuntuBionic
-            package: DEB
-
-          - distro: ArchLinux
-            package: skip # we are packaged in arch already
-            allow-failure: yes
 
           - distro: DebianBuster
             package: DEB
 
-          - distro: Fedora35
-            package: RPM
-
           - distro: Fedora34
             package: RPM
             test: skip # gtest does not compile for some reason
+
+          - distro: Fedora35
+            package: RPM
+
+          - distro: ArchLinux
+            package: skip # we are packaged in Arch already
+            allow-failure: yes
 
     name: ${{matrix.distro}}
 
@@ -208,7 +208,7 @@ jobs:
 
           - target: 10.15_Catalina
             os: macos-10.15
-            xcode: 12.1
+            xcode: 12.1.1
             type: Release
             do_tests: 0
             make_package: true
@@ -237,19 +237,19 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
-      - name: Install dependencies using homebrew
+      - name: Install dependencies using Homebrew
         shell: bash
         # cmake cannot find the mysql connector
         # neither of these works: mariadb-connector-c mysql-connector-c++
         run: brew install ccache protobuf
 
-      - name: Install QT using homebrew
+      - name: Install Qt using Homebrew
         id: brew_install_qt
         continue-on-error: true
         shell: bash
         run: brew install qt@5 --force-bottle
 
-      - name: Install QT using actions
+      - name: Install Qt using GH Actions
         if: steps.brew_install_qt.outcome != 'success'
         uses: jurplel/install-qt-action@v2
 
@@ -271,7 +271,7 @@ jobs:
       - name: Build on Xcode ${{matrix.xcode}}
         shell: bash
         env:
-          CMAKE_BUILD_PARALLEL_LEVEL: 3  # mac machines actually have 3 cores
+          CMAKE_BUILD_PARALLEL_LEVEL: 3  # Mac machines actually have 3 cores
         run: .ci/compile.sh ${{matrix.type}} --server
 
       - name: Test
@@ -293,7 +293,7 @@ jobs:
         if: matrix.make_package
         uses: actions/upload-artifact@v2
         with:
-          name: macOS-${{matrix.target}}-xcode-${{matrix.xcode}}-dmg
+          name: macOS-${{matrix.target}}-dmg
           path: ${{steps.package.outputs.path}}
           if-no-files-found: error
 
@@ -313,19 +313,19 @@ jobs:
       fail-fast: false
       matrix:
         arch:
-          - 64
           - 32
+          - 64
         include:
+          - arch: 32
+            triplet: x86
+            cmake: Win32
+
           - arch: 64
             triplet: x64
             cmake: x64
             append: _64
 
-          - arch: 32
-            triplet: x86
-            cmake: Win32
-
-    name: Windows ${{matrix.arch}}
+    name: Windows ${{matrix.arch}}bit
 
     needs: configure
 
@@ -346,14 +346,14 @@ jobs:
         with:
           submodules: recursive
 
-      - name: Restore Qt ${{env.QT_VERSION}} ${{matrix.arch}}-bit from cache
+      - name: Restore Qt ${{env.QT_VERSION}} ${{matrix.arch}}bit from cache
         id: cache-qt
         uses: actions/cache@v2
         with:
           key: ${{runner.os}}-QtCache-${{env.QT_VERSION}}-${{matrix.arch}}
           path: ${{runner.workspace}}/Qt
 
-      - name: Install ${{matrix.arch}}-bit Qt
+      - name: Install ${{matrix.arch}}bit Qt
         uses: jurplel/install-qt-action@v2
         with:
           cached: ${{steps.cache-qt.outputs.cache-hit}}
@@ -368,7 +368,7 @@ jobs:
           appendedCacheKey: ${{hashFiles('**/vcpkg.txt')}}
           vcpkgTriplet: ${{matrix.triplet}}-windows
 
-      - name: Configure Cockatrice ${{matrix.arch}}-bit
+      - name: Configure Cockatrice ${{matrix.arch}}bit
         shell: bash
         run: |
           mkdir -p build
@@ -376,7 +376,7 @@ jobs:
           export QTDIR="${{runner.workspace}}/Qt/${{env.QT_VERSION}}/${{env.QT_ARCH}}"
           cmake .. -G "${{env.CMAKE_GENERATOR}}" -A "${{matrix.cmake}}" -DCMAKE_BUILD_TYPE="Release" -DWITH_SERVER=1 -DTEST=1
 
-      - name: Build Cockatrice ${{matrix.arch}}-bit
+      - name: Build Cockatrice ${{matrix.arch}}bit
         id: package
         shell: bash
         working-directory: build
