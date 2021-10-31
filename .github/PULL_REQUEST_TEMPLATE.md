@@ -1,3 +1,10 @@
+<!-- ADD A PREFIX TO YOUR PR TITLE & USE A SPEAKING AND MEANINGFUL TITLE
+e.g. "Cockatrice: Fix bug in chat log", "Oracle: Improve workflow", "Servatrice: Reduce memory usage", "Webatrice: Rework Login page" etc.
+
+If you change other surrounding parts in the project, use a suitable prefix as well, please.
+e.g. "CI: Update Xcode", "Docs: Add new template", "Docs: Enhance README" etc.
+-->
+
 ## Related Ticket(s)
 - Fixes #IssueNumber
 
