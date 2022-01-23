@@ -787,9 +787,6 @@ MessagesSettingsPage::MessagesSettingsPage()
     chatMentionCheckBox.setChecked(SettingsCache::instance().getChatMention());
     connect(&chatMentionCheckBox, SIGNAL(stateChanged(int)), &SettingsCache::instance(), SLOT(setChatMention(int)));
 
-    chatAlertWordsCheckBox.setChecked(SettingsCache::instance().getChatMention());
-    connect(&chatAlertWordsCheckBox, SIGNAL(stateChanged(int)), &SettingsCache::instance(), SLOT(setChatMention(int)));
-
     chatMentionCompleterCheckbox.setChecked(SettingsCache::instance().getChatMentionCompleter());
     connect(&chatMentionCompleterCheckbox, SIGNAL(stateChanged(int)), &SettingsCache::instance(),
             SLOT(setChatMentionCompleter(int)));
