@@ -191,6 +191,7 @@ private:
     QAction *aAdd;
     QAction *aEdit;
     QAction *aRemove;
+    QCheckBox chatAlertWordsCheckBox;
     QCheckBox chatMentionCheckBox;
     QCheckBox chatMentionCompleterCheckbox;
     QCheckBox invertMentionForeground;

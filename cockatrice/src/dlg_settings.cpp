@@ -787,6 +787,9 @@ MessagesSettingsPage::MessagesSettingsPage()
     chatMentionCheckBox.setChecked(SettingsCache::instance().getChatMention());
     connect(&chatMentionCheckBox, SIGNAL(stateChanged(int)), &SettingsCache::instance(), SLOT(setChatMention(int)));
 
+    chatAlertWordsCheckBox.setChecked(SettingsCache::instance().getChatMention());
+    connect(&chatAlertWordsCheckBox, SIGNAL(stateChanged(int)), &SettingsCache::instance(), SLOT(setChatMention(int)));
+
     chatMentionCompleterCheckbox.setChecked(SettingsCache::instance().getChatMentionCompleter());
     connect(&chatMentionCompleterCheckbox, SIGNAL(stateChanged(int)), &SettingsCache::instance(),
             SLOT(setChatMentionCompleter(int)));
@@ -826,16 +829,12 @@ MessagesSettingsPage::MessagesSettingsPage()
             SLOT(setHighlightWords(QString)));
 
     auto *chatGrid = new QGridLayout;
-    chatGrid->addWidget(&chatMentionCheckBox, 0, 0);
-    chatGrid->addWidget(&mentionColorStringLabel, 0, 1, Qt::AlignRight);
-    chatGrid->addWidget(mentionColor, 0, 2);
-    chatGrid->addWidget(&invertMentionForeground, 0, 3);
-    chatGrid->addWidget(&chatMentionCompleterCheckbox, 1, 0, 1, -1);
-    chatGrid->addWidget(&ignoreUnregUsersMainChat, 2, 0, 1, -1);
-    chatGrid->addWidget(&ignoreUnregUserMessages, 3, 0, 1, -1);
-    chatGrid->addWidget(&messagePopups, 4, 0, 1, -1);
-    chatGrid->addWidget(&mentionPopups, 5, 0, 1, -1);
-    chatGrid->addWidget(&roomHistory, 6, 0, 1, -1);
+    chatGrid->addWidget(&chatMentionCompleterCheckbox, 0, 0, 1, -1);
+    chatGrid->addWidget(&ignoreUnregUsersMainChat, 1, 0, 1, -1);
+    chatGrid->addWidget(&ignoreUnregUserMessages, 2, 0, 1, -1);
+    chatGrid->addWidget(&messagePopups, 3, 0, 1, -1);
+    chatGrid->addWidget(&mentionPopups, 4, 0, 1, -1);
+    chatGrid->addWidget(&roomHistory, 5, 0, 1, -1);
     // Expand first column more than following ones
     chatGrid->setColumnStretch(0, 3);
     chatGrid->setColumnStretch(1, 1);
@@ -849,11 +848,16 @@ MessagesSettingsPage::MessagesSettingsPage()
     connect(highlightColor, SIGNAL(textChanged(QString)), this, SLOT(updateHighlightColor(QString)));
 
     auto *highlightNotice = new QGridLayout;
-    highlightNotice->addWidget(customAlertString, 0, 0);
-    highlightNotice->addWidget(&highlightColorStringLabel, 0, 1, Qt::AlignRight);
-    highlightNotice->addWidget(highlightColor, 0, 2);
-    highlightNotice->addWidget(&invertHighlightForeground, 0, 3);
-    highlightNotice->addWidget(&customAlertStringLabel, 1, 0, 1, -1);
+    highlightNotice->addWidget(&chatMentionCheckBox, 0, 0);
+    highlightNotice->addWidget(&mentionColorStringLabel, 0, 1, Qt::AlignRight);
+    highlightNotice->addWidget(mentionColor, 0, 2);
+    highlightNotice->addWidget(&invertMentionForeground, 0, 3);
+    highlightNotice->addWidget(&chatAlertWordsCheckBox, 1, 0);
+    highlightNotice->addWidget(customAlertString, 2, 0);
+    highlightNotice->addWidget(&highlightColorStringLabel, 2, 1, Qt::AlignRight);
+    highlightNotice->addWidget(highlightColor, 2, 2);
+    highlightNotice->addWidget(&invertHighlightForeground, 2, 3);
+    highlightNotice->addWidget(&customAlertStringLabel, 3, 0, 1, -1);
     // Expand first column more than following ones
     highlightNotice->setColumnStretch(0, 3);
     highlightNotice->setColumnStretch(1, 1);
@@ -993,8 +997,9 @@ void MessagesSettingsPage::actRemove()
 void MessagesSettingsPage::retranslateUi()
 {
     chatGroupBox->setTitle(tr("Chat settings"));
-    highlightGroupBox->setTitle(tr("Custom alert words"));
-    chatMentionCheckBox.setText(tr("Enable chat mentions"));
+    highlightGroupBox->setTitle(tr("Chat highlighting"));
+    chatMentionCheckBox.setText(tr("Enable user name mentions"));
+    chatAlertWordsCheckBox.setText(tr("Enable alert words"));
     chatMentionCompleterCheckbox.setText(tr("Enable mention completer"));
     messageShortcuts->setTitle(tr("In-game message macros"));
     ignoreUnregUsersMainChat.setText(tr("Ignore chat room messages sent by unregistered users"));
