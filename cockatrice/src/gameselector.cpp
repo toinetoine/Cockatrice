@@ -10,6 +10,7 @@
 #include "pb/serverinfo_game.pb.h"
 #include "pending_command.h"
 #include "tab_account.h"
+#include "tab_game.h"
 #include "tab_room.h"
 #include "tab_supervisor.h"
 
@@ -260,6 +261,15 @@ void GameSelector::actJoin()
     if (!r) {
         QMessageBox::critical(this, tr("Error"), tr("Please join the respective room first."));
         return;
+    }
+
+    QMap<int, TabGame *> gameTabs = tabSupervisor->getGameTabs();
+    foreach (const int gameId, gameTabs.keys()) {
+        if (game.game_id() == gameId) {
+            const TabGame *tabGame = gameTabs[gameId];
+            const int gameTabIndex = tabSupervisor->indexOf((QWidget *)tabGame);
+            ((QTabWidget *)tabSupervisor)->setCurrentIndex(gameTabIndex);
+        }
     }
 
     PendingCommand *pend = r->prepareRoomCommand(cmd);

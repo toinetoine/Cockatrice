@@ -113,6 +113,10 @@ public:
     {
         return roomTabs;
     }
+    const QMap<int, TabGame *> &getGameTabs() const
+    {
+        return gameTabs;
+    }
     bool getAdminLocked() const;
     bool closeRequest();
     bool isOwnUserRegistered() const;
